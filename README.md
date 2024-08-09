@@ -24,7 +24,7 @@ wget https://github.com/nlohmann/json/releases/latest/download/json.hpp -P inclu
 | `└── Makefile`      | Makefile to build and manage the project |
 | `gen_config.py` | Script to generate configuration         |
 
-## Building the Project
+## Generating the Dataset
 
 1. Make speak2spike (s2s) dataset
 
@@ -46,7 +46,7 @@ generate s2s test dataset
 make OUTPUT_FILES="test.bin " WAV_FILE_SOURCE=testing SPLIT_NUM="300 " CATEGORY="yes no up down left right on off stop go"
 ```
 
-
+## Building the Project
 
 1. Run `gen_config.py` to generate the configuration files in the Makefile directory.
 
