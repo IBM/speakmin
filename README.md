@@ -1,6 +1,6 @@
-# speakmin_project
-This repository is for open-sourcing process.
-This project implements a spiking neural network simulator called SpeakMin. It includes core functionalities for simulating neurons, handling spikes, and recording events. The project is built using C++17 and leverages OpenMP for parallel processing.
+# speakmin
+This project implements a spiking reservoir computing simulator for keyword spotting named SpeakMin. 
+It includes core functionalities for simulating neurons, handling spikes, and recording events. The project is built using C++17 and leverages OpenMP for parallel processing.
 
 ## Prerequisites
 
