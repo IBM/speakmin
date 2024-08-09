@@ -246,10 +246,13 @@ bool Core::run_loop(uint32_t T_sim) {
     size_t train_signal;
 
     while (T_now <= T_sim) {
+        // if (internal_S_queue.empty()) break;
         uint32_t T_external = external_S_queue.empty() ? T_sim + 1 : external_S_queue.top().time;
         uint32_t T_internal = internal_S_queue.empty() ? T_sim + 1 : internal_S_queue.top().time;
         T_now = std::min(T_external, T_internal);
 
+        // std::cout << T_now << std::endl;
+        
         if (T_now > T_sim) break;
 
         while (!external_S_queue.empty() && external_S_queue.top().time <= T_now) {
@@ -273,7 +276,7 @@ bool Core::run_loop(uint32_t T_sim) {
         if (N_training_times == 0) {
             throw std::runtime_error("N_out_times or N_training_times cannot be zero");
         }
-        train_signal = (static_cast<size_t>(T_now) / 10) % N_training_times;
+        train_signal = ((static_cast<size_t>(T_now) + 4 * N_training_slide) / 4) % N_training_times;
 // #endif
 
         // Parallelize the leak method for Neu_res and Neu_out
@@ -298,16 +301,13 @@ bool Core::run_loop(uint32_t T_sim) {
             char layer = S_now.id.second;
 
             if (layer == 'r') {
-                #pragma omp parallel for
                 for (size_t j = 0; j < Neu_res.size(); ++j) {
                     Neu_res[j].in(W_res[id_now][j]);
                 }
-                #pragma omp parallel for
                 for (size_t j = 0; j < Neu_out.size(); ++j) {
                     Neu_out[j].in(W_out[id_now][j]);
                 }
             } else if (layer == 'i') {
-                #pragma omp parallel for
                 for (size_t j = 0; j < Neu_res.size(); ++j) {
                     Neu_res[j].in(W_in[id_now][j]);
                 }
@@ -315,14 +315,22 @@ bool Core::run_loop(uint32_t T_sim) {
         }
 
         while (!Event_queue_delay.empty() && Event_queue_delay.top().time <= T_now) {
-            Event_vec_now.push_back(Event_queue_delay.top());
-            Event_queue_delay.pop();
+            #pragma omp critical
+            {
+                Event_vec_now.push_back(Event_queue_delay.top());
+                Event_queue_delay.pop();
+            }
         }
 
         while (!S_vec_trace.empty() && S_vec_trace.top().time <= T_now) {
+            #pragma omp critical
+            {
             S_vec_trace_now.push_back(S_vec_trace.top());
             S_vec_trace.pop();
+            }
         }
+        
+        // std::cout << "after spike sampling " << std::endl;
 
         #pragma omp parallel sections
         {
@@ -348,9 +356,8 @@ bool Core::run_loop(uint32_t T_sim) {
                                     }
                                 }
                             }
-
                             #pragma omp critical
-                            {/**/
+                            {
                                 for (int n = 0; n < 4 * 5; ++n) {
                                     S_vec_trace.push(Spike(T_now + t_delay + n + 1, {i, 'r'}));
                                 }
@@ -387,7 +394,6 @@ bool Core::run_loop(uint32_t T_sim) {
                                         }
                                     }
                                 }
-
                                 for (const auto& S_now : S_vec_trace_now) {
                                     int id_now = S_now.id.first;
                                     char layer = S_now.id.second;
@@ -403,12 +409,21 @@ bool Core::run_loop(uint32_t T_sim) {
                                     }
                                 }
                             }
+                            
+                            for (const auto& E_now : Event_vec_now) {
+                                int spk_id_now = E_now.spk_id.first;
+                                int neu_id_now = E_now.neu_id.first;
+                                Event_unit event(T_now, E_now.spk_id, E_now.neu_id, false == W_fb[neu_id_now][i]);
+                                #pragma omp critical
+                                {
+                                    Event_queue.push(event);
+                                }
+                            }
+                            
                         }
                         Neu_out[i].reset();
-                        #pragma omp critical
-                        {
-                            Neu_acc[i / N_out_times] += 1;
-                        }
+                        #pragma omp atomic
+                        Neu_acc[i / N_out_times] += 1;
                     }
                 }
             }
@@ -452,10 +467,23 @@ bool Core::run_loop(uint32_t T_sim) {
                                 }
                             }
                         }
+                        
+                        for (const auto& E_now : Event_vec_now) {
+                            int spk_id_now = E_now.spk_id.first;
+                            int neu_id_now = E_now.neu_id.first;
+                            Event_unit event(T_now, E_now.spk_id, E_now.neu_id, true == W_fb[neu_id_now][class_now*N_out_times + k]);
+                            #pragma omp critical
+                            {
+                                Event_queue.push(event);
+                            }
+                        }
+                        
                     }
                 }
             }
         }
+
+        // std::cout << "before updating " << std::endl;
 
         if (enabling_train && !train_signal) {
             std::vector<Event_unit> events;
@@ -486,14 +514,29 @@ bool Core::run_loop(uint32_t T_sim) {
                         if (W_out[spk_id_now][neu_id_now] < -1.0) W_out[spk_id_now][neu_id_now] = -1.0;
                     }
                 }
+                
+                else if (spk_l_now == 'r' && neu_l_now == 'r'){
+                    if (sign) {
+                        #pragma omp atomic
+                        W_res[spk_id_now][neu_id_now] += lr*0.1;
+                        if (W_res[spk_id_now][neu_id_now] > 0.1) W_res[spk_id_now][neu_id_now] = 0.1;
+                    } else {
+                        #pragma omp atomic
+                        W_res[spk_id_now][neu_id_now] -= lr*0.1;
+                        if (W_res[spk_id_now][neu_id_now] < -0.1) W_res[spk_id_now][neu_id_now] = -0.1;
+                    }
+                }
+                
             }
         }
 
         S_vec_now.clear();
         S_vec_trace_now.clear();
+        S_vec_trace_delay_now.clear();
         Event_vec_now.clear();
     }
 
+    N_training_slide = (N_training_slide + 1) % N_training_times;
     // train_index = (train_index + 1) % N_out_times;
 
     uint8_t max_index = std::distance(Neu_acc.begin(), std::max_element(Neu_acc.begin(), Neu_acc.end()));

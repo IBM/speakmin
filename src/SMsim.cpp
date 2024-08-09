@@ -311,11 +311,11 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Starting SMsim..." << std::endl;
 
-    // std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset0/train";
-    // std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset0/test.bin";
+    std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset0/train";
+    std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset0/test.bin";
 
-    std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset1/train";
-    std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset1/test.bin";
+    // std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset1/train";
+    // std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset1/test.bin";
 
     // std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset2/train";
     // std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset2/test.bin";
@@ -326,7 +326,7 @@ int main(int argc, char *argv[]) {
     std::cout << "CXX: " <<  __VERSION__ << std::endl;
 
     int num_chunks = 10;
-    int num_epochs = 500;
+    int num_epochs = 1000;
 
     std::string param_file = "./init_parameter.json";
     std::string weights_file = "./init_weights.json";
@@ -357,6 +357,7 @@ int main(int argc, char *argv[]) {
         std::cout << "\nStarting training epoch " << epoch << "...\n";
 
         int chunk_index = epoch % num_chunks;
+        core_template.N_training_slide = (epoch/num_chunks) % core_template.N_training_times;
         std::stringstream ss;
         ss << base_train_file_path << chunk_index << ".bin";
         std::string train_file_path = ss.str();
