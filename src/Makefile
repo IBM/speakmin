@@ -37,6 +37,9 @@ DEPS := $(SRCS:.cpp=.d)
 # Target executable
 TARGET := SMsim
 
+# Default installation directory
+INSTALL_DIR ?= /usr/local/bin
+
 # Phony targets
 .PHONY: all clean debug install uninstall run
 
@@ -69,12 +72,12 @@ clean:
 
 # Install target
 install: $(TARGET)
-	install -d /usr/local/bin
-	install $(TARGET) /usr/local/bin
+	install -d $(INSTALL_DIR)
+	install $(TARGET) $(INSTALL_DIR)
 
 # Uninstall target
 uninstall:
-	rm -f /usr/local/bin/$(TARGET)
+	rm -f $(INSTALL_DIR)/$(TARGET)
 
 # Run target
 run: all
