@@ -14,16 +14,16 @@ wget https://github.com/nlohmann/json/releases/latest/download/json.hpp -P inclu
 
 | File            | Description                              |
 |-----------------|------------------------------------------|
-| src             |                                          |
-|-----------------|------------------------------------------|
-| `SMsim.cpp`     | Main simulation file                     |
-| `Core.cpp`      | Core functionalities of the simulator    |
-| `Event_unit.cpp`| Event handling functionalities           |
-| `Spike.cpp`     | Spike handling functionalities           |
 | `include/`      | Header files directory                   |
-| `Makefile`      | Makefile to build and manage the project |
+| `speech2spikes/`      | speech2spike dataset                   |
+| `src`           |                                          |
+| `├── SMsim.cpp`     | Main simulation file                     |
+| `├── Core.cpp`      | Core functionalities of the simulator    |
+| `├── Event_unit.cpp`| Event handling functionalities           |
+| `├── Spike.cpp`     | Spike handling functionalities           |
+| `└── Makefile`      | Makefile to build and manage the project |
 |-----------------|------------------------------------------|
-| `gen_config.py` | generate configuration                   |
+| `gen_config.py` | Script to generate configuration         |
 |-----------------|------------------------------------------|
 
 ## Building the Project
