@@ -6,7 +6,10 @@ This project implements a spiking neural network simulator called SpeakMin. It i
 
 - **C++17** compatible compiler (e.g., `g++`)
 - **OpenMP** support for parallelization
-
+- **nlohmann/json** read the .json files
+```
+wget https://github.com/nlohmann/json/releases/latest/download/json.hpp -P include/nlohmann/
+```
 ## Project Structure
 
 | File            | Description                              |
@@ -73,12 +76,12 @@ make run TRAIN_PHASIC_ENABLED=1
 make run TRAIN_ELIGIBLETRACE_ENABLED=1
 ```
 
-### Additional Makefile Targets
+### Additional Makefile Targets `make clean`, `make debug`, `make install`, `make uninstall`
 ```
-`make clean`: Removes the compiled object files and the executable.
-`make debug`: Compiles the project with debugging symbols enabled.
-`make install`: Installs the executable to /usr/local/bin.
-`make uninstall`: Removes the installed executable from /usr/local/bin.
+make clean: Removes the compiled object files and the executable.
+make debug: Compiles the project with debugging symbols enabled.
+make install: Installs the executable to /usr/local/bin.
+make uninstall: Removes the installed executable from /usr/local/bin.
 ```
 
 ## License
