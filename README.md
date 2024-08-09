@@ -22,28 +22,42 @@ wget https://github.com/nlohmann/json/releases/latest/download/json.hpp -P inclu
 | `├── Event_unit.cpp`| Event handling functionalities           |
 | `├── Spike.cpp`     | Spike handling functionalities           |
 | `└── Makefile`      | Makefile to build and manage the project |
-|-----------------|------------------------------------------|
 | `gen_config.py` | Script to generate configuration         |
 |-----------------|------------------------------------------|
 
 ## Building the Project
 
-1. Make speak2spike(s2s) dataset
+1. Make speak2spike (s2s) dataset
 
 ```
 cd /speakmin_project/speech2spikes/tools
+```
+```
 pip install -r requirements.txt
+```
+```
 cd /speakmin_project/speech2spikes/tools/gen_spike
+```
+```
 make OUTPUT_FILES="train0.bin train1.bin train2.bin train3.bin train4.bin train5.bin train6.bin train7.bin train8.bin train9.bin" WAV_FILE_SOURCE=not_testing SPLIT_NUM="300 300 300 300 300 300 300 300 300 300 " CATEGORY="yes no up down left right on off stop go"
+```
+: generate s2s trianing dataset
+```
 make OUTPUT_FILES="test.bin " WAV_FILE_SOURCE=testing SPLIT_NUM="300 " CATEGORY="yes no up down left right on off stop go"
 ```
+: generate s2s test dataset
+
 
 
 1. Run `gen_config.py` to generate the configuration files in the Makefile directory.
 
 ```
 pip install -r requirements.txt
+```
+```
 cd /speakmin_project
+```
+```
 python gen_config.py
 ```
 
@@ -51,8 +65,14 @@ python gen_config.py
 
 ```
 cd /speakmin_project/src
+```
+```
 make run
 ```
+```
+make install INSTALL_DIR=/desired/path/to/install
+```
+: you can install on the preferred path where you want. The default path is `/usr/local/bin`.
 
 ## Training Modes
 
@@ -78,11 +98,25 @@ make run TRAIN_ELIGIBLETRACE_ENABLED=1
 
 ### Additional Makefile Targets `make clean`, `make debug`, `make install`, `make uninstall`
 ```
-make clean: Removes the compiled object files and the executable.
-make debug: Compiles the project with debugging symbols enabled.
-make install: Installs the executable to /usr/local/bin.
-make uninstall: Removes the installed executable from /usr/local/bin.
+make clean
 ```
+: Removes the compiled object files and the executable.
+
+```
+make debug
+```
+: Compiles the project with debugging symbols enabled.
+
+```
+make install
+```
+: Installs the executable to /usr/local/bin.
+
+```
+make uninstall
+```
+: Removes the installed executable from /usr/local/bin.
+
 
 ## License
 This project is licensed under Apache License 2.0.
