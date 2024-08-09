@@ -11,12 +11,17 @@ This project implements a spiking neural network simulator called SpeakMin. It i
 
 | File            | Description                              |
 |-----------------|------------------------------------------|
+| src             |                                          |
+|-----------------|------------------------------------------|
 | `SMsim.cpp`     | Main simulation file                     |
 | `Core.cpp`      | Core functionalities of the simulator    |
 | `Event_unit.cpp`| Event handling functionalities           |
 | `Spike.cpp`     | Spike handling functionalities           |
 | `include/`      | Header files directory                   |
 | `Makefile`      | Makefile to build and manage the project |
+|-----------------|------------------------------------------|
+| `gen_config.py` | generate configuration                   |
+|-----------------|------------------------------------------|
 
 ## Building the Project
 
@@ -69,10 +74,12 @@ make run TRAIN_ELIGIBLETRACE_ENABLED=1
 ```
 
 ### Additional Makefile Targets
-make clean: Removes the compiled object files and the executable.
-make debug: Compiles the project with debugging symbols enabled.
-make install: Installs the executable to /usr/local/bin.
-make uninstall: Removes the installed executable from /usr/local/bin.
+```
+`make clean`: Removes the compiled object files and the executable.
+`make debug`: Compiles the project with debugging symbols enabled.
+`make install`: Installs the executable to /usr/local/bin.
+`make uninstall`: Removes the installed executable from /usr/local/bin.
+```
 
 ## License
 This project is licensed under Apache License 2.0.
