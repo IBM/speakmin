@@ -311,14 +311,14 @@ int main(int argc, char *argv[]) {
 
     std::cout << "Starting SMsim..." << std::endl;
 
-    std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset0/train";
-    std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset0/test.bin";
+    // std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset0/train";
+    // std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset0/test.bin";
 
     // std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset1/train";
     // std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset1/test.bin";
 
-    // std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset2/train";
-    // std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset2/test.bin";
+    std::string base_train_file_path = "../speech2spikes/tools/gen_spike/dataset2/train";
+    std::string test_file_path = "../speech2spikes/tools/gen_spike/dataset2/test.bin";
 
     std::cout << "dataset: " <<  base_train_file_path << std::endl;
 
@@ -357,7 +357,9 @@ int main(int argc, char *argv[]) {
         std::cout << "\nStarting training epoch " << epoch << "...\n";
 
         int chunk_index = epoch % num_chunks;
+#if defined(TRAIN_PHASE)
         core_template.N_training_slide = (epoch/num_chunks) % core_template.N_training_times;
+#endif
         std::stringstream ss;
         ss << base_train_file_path << chunk_index << ".bin";
         std::string train_file_path = ss.str();

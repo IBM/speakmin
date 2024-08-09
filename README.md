@@ -4,9 +4,8 @@ This project implements a spiking neural network simulator called SpeakMin. It i
 
 ## Prerequisites
 
-- GCC compiler with C++17 support
-- OpenMP
-- Git
+- **C++17** compatible compiler (e.g., `g++`)
+- **OpenMP** support for parallelization
 
 ## Project Structure
 
@@ -46,3 +45,34 @@ python gen_config.py
 cd /speakmin_project/src
 make run
 ```
+
+## Training Modes
+
+- **DFA (Direct Feedback Alignment):** The 'default' training mode if no other mode is specified.
+```
+make run TRAIN_MODE=DFA
+```
+- **FA (Feedback Alignment):** Can be activated by setting the `TRAIN_MODE` variable to `FA`.
+```
+make run TRAIN_MODE=FA
+```
+
+### Optional Features
+
+- **TRAIN_PHASE:** This feature can be enabled by setting the `TRAIN_PHASIC_ENABLED` flag.
+```
+make run TRAIN_PHASIC_ENABLED=1
+```
+- **TRAIN_ELIGIBLETRACE:** This feature can be enabled by setting the `TRAIN_ELIGIBLETRACE_ENABLED` flag.
+```
+make run TRAIN_ELIGIBLETRACE_ENABLED=1
+```
+
+### Additional Makefile Targets
+make clean: Removes the compiled object files and the executable.
+make debug: Compiles the project with debugging symbols enabled.
+make install: Installs the executable to /usr/local/bin.
+make uninstall: Removes the installed executable from /usr/local/bin.
+
+## License
+This project is licensed under Apache License 2.0.

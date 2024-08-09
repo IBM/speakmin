@@ -1,7 +1,27 @@
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2 -g -DREFRACTORY -DPHASIC_TRAIN -fopenmp
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2 -g -DREFRACTORY -fopenmp
 LDFLAGS := -fopenmp
+
+# Default to TRAIN_FA if TRAIN_MODE is not specified
+TRAIN_MODE ?= DFA
+
+# Set the TRAIN macro based on the TRAIN_MODE value
+ifeq ($(TRAIN_MODE), DFA)
+    CXXFLAGS += -DTRAIN_DFA
+else ifeq ($(TRAIN_MODE), FA)
+    CXXFLAGS += -DTRAIN_FA
+endif
+
+# Conditionally enable TRAIN_PHASE
+ifdef TRAIN_PHASIC_ENABLED
+    CXXFLAGS += -DTRAIN_PHASE
+endif
+
+# Conditionally enable TRAIN_ELIGIBLETRACE
+ifdef TRAIN_ELIGIBLETRACE_ENABLED
+    CXXFLAGS += -DTRAIN_ELIGIBLETRACE
+endif
 
 # Include directories
 INCLUDES := -I../include
@@ -24,7 +44,7 @@ TARGET := SMsim
 all: check_includes $(TARGET)
 
 # Debug target
-debug: CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O0 -g -DDEBUG -DREFRACTORY -DPHASIC_TRAIN -fopenmp
+debug: CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O0 -g -DDEBUG -DREFRACTORY -fopenmp
 debug: clean check_includes $(TARGET)
 
 # Check includes directory
