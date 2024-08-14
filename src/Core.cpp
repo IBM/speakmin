@@ -215,6 +215,22 @@ void Core::reset() {
         internal_S_queue.pop();
     }
 
+    while (!Event_queue.empty()) {
+        Event_queue.pop();
+    }
+
+    while (!Event_queue_delay.empty()) {
+        Event_queue_delay.pop();
+    }
+
+    while (!S_vec_trace.empty()) {
+        S_vec_trace.pop();
+    }
+
+    while (!S_vec_trace_delay.empty()) {
+        S_vec_trace_delay.pop();
+    }
+
     S_vec_now.clear();
     Neu_acc.assign(10, 0);
 }
@@ -361,10 +377,10 @@ bool Core::run_loop(uint32_t T_sim) {
 #if defined(TRAIN_ELIGIBLETRACE)
                             #pragma omp critical
                             {
-                                /*
-                                for (int n = 0; n < 4 * 5; ++n) {
+                                
+                                for (int n = 0; n < 10 * 2; ++n) {
                                     S_vec_trace.push(Spike(T_now + t_delay + n + 1, {i, 'r'}));
-                                }*/
+                                }
                             }
 #endif
                         }
