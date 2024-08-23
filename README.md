@@ -74,7 +74,9 @@ make install INSTALL_DIR=/desired/path/to/install
 ```
 
 ## Training Modes
-
+```
+make run TRAIN_MODE=NONE
+```
 - **DFA (Direct Feedback Alignment):** The 'default' training mode if no other mode is specified.
 ```
 make run TRAIN_MODE=DFA
@@ -93,6 +95,10 @@ make run TRAIN_PHASIC_ENABLED=1
 - **TRAIN_ELIGIBLETRACE:** This feature can be enabled by setting the `TRAIN_ELIGIBLETRACE_ENABLED` flag.
 ```
 make run TRAIN_ELIGIBLETRACE_ENABLED=1
+```
+
+```
+make run TRAIN_MODE=NONE TRAIN_ELIGIBLETRACE_ENABLED=1 TRAIN_PHASIC_ENABLED=1
 ```
 
 ### Additional Makefile Targets 
