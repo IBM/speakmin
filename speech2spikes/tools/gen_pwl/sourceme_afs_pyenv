@@ -1,0 +1,13 @@
+#
+# Dataset path
+#---------------------------------
+export DATASET_PATH=/afs/apd.pok.ibm.com/func/data/nvram/u/y28254/gizmo/git/speech2spikes/dataset/speech_commands_v0.02
+#
+# Python env
+#---------------------------------
+export PYENV_ROOT="/afs/apd/ant/cte_tech/e14/zeus2/y28254/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+pyenv activate sm2
