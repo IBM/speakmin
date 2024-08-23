@@ -12,8 +12,9 @@ struct Config {
     double T_sim;
     double t_delay;
     double V_init;
-    double tau;
+    double tau_out;
     double V_th;
+    double V_bot;
     double V_reset;
 #if defined(REFRACTORY)
     double t_ref;
@@ -23,7 +24,14 @@ struct Config {
     int N_in;
     int N_res;
     int N_out;
+    int N_class;
+    int N_out_times;
     int N_bias;
+
+    size_t ET_N;
+    size_t PTE_slide;
+    size_t PTE_times;
+    size_t PTE_range;
 };
 
 #endif // CONFIG_H

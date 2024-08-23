@@ -2,12 +2,15 @@
 #define NEURON_H
 
 #include <cmath>
+#include <ostream>
+#include <iostream>
 
 class Neuron {
 private:
     double V_mem;      // Membrane potential
     double tau;        // Time constant
     double V_th;       // Threshold potential
+    double V_bot;      // limited under value - HW constraint
     double V_reset;    // Reset potential
     uint32_t T_now;      // Current simulation time
     uint32_t T_last;     // Time of the last update for leaky computation
@@ -21,16 +24,17 @@ private:
 
 public:
 #if defined(REFRACTORY)
-    Neuron(double V_init, double tau, double V_th, double V_reset, uint32_t t_ref, double SG_window)
-        : V_mem(V_init), tau(tau), V_th(V_th), V_reset(V_reset), T_now(0), T_last(0), SG_window(SG_window), T_SG(0), T_ref(0), t_ref(t_ref) {}
+    Neuron(double V_init, double tau, double V_th, double V_bot, double V_reset, uint32_t t_ref, double SG_window)
+        : V_mem(V_init), tau(tau), V_th(V_th), V_bot(V_bot), V_reset(V_reset), T_now(0), T_last(0), SG_window(SG_window), T_SG(0), T_ref(0), t_ref(t_ref) {}
 #else
-    Neuron(double V_init, double tau, double V_th, double V_reset, double SG_window)
-        : V_mem(V_init), tau(tau), V_th(V_th), V_reset(V_reset), T_now(0), T_last(0), SG_window(SG_window), T_SG(0) {}
+    Neuron(double V_init, double tau, double V_th, double V_bot, double V_reset, double SG_window)
+        : V_mem(V_init), tau(tau), V_th(V_th), V_bot(V_bot), V_reset(V_reset), T_now(0), T_last(0), SG_window(SG_window), T_SG(0) {}
 #endif
 
     // Getter methods
     double get_tau() const { return tau; }
     double get_V_th() const { return V_th; }
+    double get_V_bot() const { return V_bot; }
     double get_V_reset() const { return V_reset; }
     double get_V_mem() const { return V_mem; }
     double get_SG_window() const { return SG_window; }
@@ -56,6 +60,8 @@ public:
         }
 #endif
         V_mem += input;
+        // clamped V_mem
+        if (V_mem < V_bot) V_mem = V_bot;
     }
 
     // Function to check if the neuron is firing
@@ -69,15 +75,29 @@ public:
 #endif
     }
 
+    // Function to reset the membrane potential to the resting state after firing
+    inline void reset_ref() {
+#if defined(REFRACTORY)
+        T_SG = 0;
+        T_ref = 0;
+#endif
+    }
+
     // Function to compute surrogate gradient
     inline bool get_SG() {
         bool SG = std::abs(V_mem - V_th) < SG_window;
-        if (SG) T_SG = T_now + tau;  // Assuming you meant tau, not t_ref
+#if defined(REFRACTORY)
+        // for negative/positive balanced update
+        // not t_ref? tau?
+        if (SG) T_SG = T_now + t_ref;
+#endif
         return SG;
     }
 
     // Function to check if surrogate gradient reference time is active
-    inline bool is_SG_ref(uint32_t T_now) const { return T_now < T_SG; }
+    inline bool is_SG_ref(uint32_t T_now) const { 
+        
+        return T_now < T_SG; }
 
 #if defined(REFRACTORY)
     inline bool is_ref(uint32_t T_now) const { return T_now < T_ref; }
