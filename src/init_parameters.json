@@ -1,0 +1,30 @@
+{
+    "system_parameter": {
+        "T_sim": 1000000000,
+        "epoch": 100,
+        "lr": 0.004,
+        "test_file": "../speech2spikes/tools/gen_spike/test.bin",
+        "training_file": "../speech2spikes/tools/gen_spike/train",
+        "N_chunks": 10
+    },
+    "core_parameter": {
+        "t_delay": 3,
+        "V_init": 0.0,
+        "tau_out": 10000.0,
+        "V_bot": -1.0,
+        "V_th": 1.0,
+        "V_reset": 0.0,
+        "t_ref": 4,
+        "SG_window": 0.5,
+        "N_in": 16,
+        "N_res": 496,
+        "N_out": 10,
+        "N_bias": 10,
+        "N_class": 10,
+        "N_out_times": 1,
+        "PTE_slide": 0,
+        "PTE_times": 4,
+        "PTE_range": 1,
+        "ET_N": 15
+    }
+}

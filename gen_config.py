@@ -125,8 +125,8 @@ system_parameters = {
     "T_sim": 1000000000,
     "epoch": 100,                                               # Example epoch value
     "lr": 0.004,                                                # same as conductance steps. This is for 8bits ~ 1/250.
-    "test_file": "../speech2spikes/tools/gen_spike/final_new_num_dataset2/test.bin",    # Replace with the actual test file path
-    "training_file": "../speech2spikes/tools/gen_spike/final_new_num_dataset2/train",   # Replace with the actual training file path
+    "test_file": "../speech2spikes/tools/gen_spike/test.bin",    # Replace with the actual test file path
+    "training_file": "../speech2spikes/tools/gen_spike/train",   # Replace with the actual training file path
     # /home/sungminlee/Speakmin_draft/SpeakMin/speech2spikes/tools/gen_spike/train0.bin
     # /home/sungminlee/Speakmin_draft/SpeakMin/speech2spikes/tools/gen_spike/final_new_num_dataset2
     "N_chunks": 10,                             # you can devide training dataset as 'chunk'
@@ -148,9 +148,9 @@ weights = {
 }
 
 # Paths to the JSON files in the src directory
-parameters_path = os.path.join('s2s_src_bias_rsnn', 'init_parameters.json')
-weights_path = os.path.join('s2s_src_bias_rsnn', 'init_weights.json')
-tau_path = os.path.join('s2s_src_bias_rsnn', 'init_taus.json')
+parameters_path = './src/init_parameters.json'
+weights_path = './src/init_weights.json'
+tau_path = './src/init_taus.json'
 
 # Save the parameters to the init_parameters.json file
 with open(parameters_path, 'w') as f:
