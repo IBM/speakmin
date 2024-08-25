@@ -262,6 +262,9 @@ bool Core::run() {
 
 // Run the simulation loop
 bool Core::run_loop() {
+
+    omp_set_num_threads(4);
+
     uint32_t T_now = 0;
     size_t class_now = static_cast<size_t>(class_label);
     size_t train_signal;

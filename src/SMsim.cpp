@@ -128,6 +128,7 @@ void load_spike_trains_parallel(const std::string& file_path, std::vector<std::v
         
         // you could change this part for another classes
         all_labels[i] = label;
+        // all_labels[i] = label-10;
 
         local_file.close();
     }
