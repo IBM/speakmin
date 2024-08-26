@@ -1,7 +1,7 @@
 # Compiler and flags
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2 -g -DREFRACTORY -fopenmp
-LDFLAGS := -fopenmp
+LDFLAGS := -fopenmp -lstdc++fs
 
 # Default to TRAIN_FA if TRAIN_MODE is not specified
 TRAIN_MODE ?= DFA
