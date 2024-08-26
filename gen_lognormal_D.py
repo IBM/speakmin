@@ -34,29 +34,29 @@ tau_bins = np.digitize(tau_samples_resampled, bins)
 tau_bins = np.clip(tau_bins - 1, 0, len(tau_values) - 1)
 tau_array_hetero = tau_values[tau_bins]
 
-# 결과의 평균을 확인
+# Echo mean value
 mean_actual = np.mean(tau_array_hetero)
 print(f"Actual mean: {mean_actual}")
 
-# 각 구간별 개수 프린트
+# Echo unique tau value and counts
 unique, counts = np.unique(tau_array_hetero, return_counts=True)
 for value, count in zip(unique, counts):
     print(f"Value {value}: {count} samples")
 
-# 히스토그램 그리기 및 저장
+# Plot histgram of the distribution
 plt.hist(tau_array_hetero, bins=np.linspace(200, 1400, 8), edgecolor='black', density=True, alpha=0.6, color='b')
 plt.title('Log-Normal Distribution with Adjusted Mean')
 plt.xlabel('Value')
 plt.ylabel('Frequency')
 
-# 평균값 표시
+# Plot mean value lines and text
 plt.axvline(mean_actual, color='r', linestyle='dashed', linewidth=1)
 plt.text(mean_actual, plt.ylim()[1]*0.9, f'Mean: {mean_actual:.2f}', color='r')
 
-# 왼쪽 title이 짤리지 않도록 설정
+# Tight layout
 plt.tight_layout()
 
-# PNG 파일로 저장
+# Save as PNG
 plt.savefig('./log_normal_histogram.png')
 plt.show()
 
