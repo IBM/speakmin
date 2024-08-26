@@ -6,9 +6,13 @@ It includes core functionalities for simulating neurons, handling spikes, and re
 
 - **C++17** compatible compiler (e.g., `g++`)
 - **OpenMP** support for parallelization
+- **Python** 3.10.12
 - **nlohmann/json** read the .json files
 ```
+mkdir -p include/nlohmann
 wget https://github.com/nlohmann/json/releases/latest/download/json.hpp -P include/nlohmann/
+or
+curl -L -o include/nlohmann/json.hpp https://github.com/nlohmann/json/releases/latest/download/json.hpp
 ```
 ## Project Structure
 
