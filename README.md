@@ -22,19 +22,19 @@ $ pip install -r requirements.txt
 
 ## File trees
 ```bash
-include              | Directory for header files
-python               | Directory for Python scripts
-src                  | Directory for source code
-├─ SMsim.cpp         | Main simulation file
-├─ Core.cpp          | Core functionalities of the simulator
-├─ Event_unit.cpp    | Event handling functionalities
-├─ Spike.cpp         | Spike handling functionalities
-└─ Makefile          | Makefile to build and manage the project
-tools                | Directory for tools
-└─ speech-to-spikes  | Directory for speech-to-spike converstion utility
-run                  | Directory for running simulations
-├─ gen_config.py     | Script to generate sim configuration
-└─ Makefile          | Makefile for running simulations
+include              # Directory for header files
+python               # Directory for Python scripts
+src                  # Directory for source code
+├─ SMsim.cpp         # Main simulation file
+├─ Core.cpp          # Core functionalities of the simulator
+├─ Event_unit.cpp    # Event handling functionalities
+├─ Spike.cpp         # Spike handling functionalities
+└─ Makefile          # Makefile to build and manage the project
+tools                # Directory for tools
+└─ speech-to-spikes  # Directory for speech-to-spike converstion utility
+run                  # Directory for running simulations
+├─ gen_config.py     # Script to generate sim configuration
+└─ Makefile          # Makefile for running simulations
 ```
 
 ## How to run
