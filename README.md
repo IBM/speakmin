@@ -1,132 +1,92 @@
 # speakmin
-This project implements a spiking reservoir computing simulator for keyword spotting named SpeakMin. 
-It includes core functionalities for simulating neurons, handling spikes, and recording events. The project is built using C++17 and leverages OpenMP for parallel processing.
+`speakmin` is an event-based simulator for spiking reservoir computing. It includes core functionalities for simulating neurons, handling spikes, and recording events. Keyword spotting is implemented as one of demonstrations, but any demonstrations can be run if spike dataset is prepared. The project is built using C++17 and leverages OpenMP for parallel processing.
+
+> ⚠️ This repository is currently in beta and under active development. Please be mindful of potential issues and keep an eye for improvements, new features and bug fixes in upcoming versions.
 
 ## Prerequisites
 
 - **C++17** compatible compiler (e.g., `g++`)
 - **OpenMP** support for parallelization
-- **Python** 3.10.12
+- **Python** 3.10.12 or higher
 - **nlohmann/json** read the .json files
-```
-mkdir -p include/nlohmann
-wget https://github.com/nlohmann/json/releases/latest/download/json.hpp -P include/nlohmann/
-or
-curl -L -o include/nlohmann/json.hpp https://github.com/nlohmann/json/releases/latest/download/json.hpp
-```
-## Project Structure
+```bash
+### Download json.hpp ###
+$ mkdir -p include/nlohmann
+$ wget https://github.com/nlohmann/json/releases/latest/download/json.hpp -P include/nlohmann/
+  or
+$ curl -L -o include/nlohmann/json.hpp https://github.com/nlohmann/json/releases/latest/download/json.hpp
 
-| File            | Description                              |
-|-----------------|------------------------------------------|
-| `include/`      | Header files directory                   |
-| `speech2spikes/`      | speech2spike dataset                   |
-| `src`           |                                          |
-| `├── SMsim.cpp`     | Main simulation file                     |
-| `├── Core.cpp`      | Core functionalities of the simulator    |
-| `├── Event_unit.cpp`| Event handling functionalities           |
-| `├── Spike.cpp`     | Spike handling functionalities           |
-| `└── Makefile`      | Makefile to build and manage the project |
-| `gen_config.py` | Script to generate configuration         |
-
-## Generating the Dataset
-
-1. Make speak2spike (s2s) dataset
-
-```
-cd /speakmin/speech2spikes/tools
-```
-```
-pip install -r requirements.txt
-```
-```
-cd /speakmin/speech2spikes/tools/gen_spike
-```
-generate s2s trianing dataset
-```
-make OUTPUT_FILES="train0.bin train1.bin train2.bin train3.bin train4.bin train5.bin train6.bin train7.bin train8.bin train9.bin" WAV_FILE_SOURCE=not_testing SPLIT_NUM="300 300 300 300 300 300 300 300 300 300 " CATEGORY="yes no up down left right on off stop go" ALPHA=10 LEAK_ENABLE=1 LEAK_TAU=20000e-6
-```
-generate s2s test dataset
-```
-make OUTPUT_FILES="test.bin " WAV_FILE_SOURCE=testing SPLIT_NUM="300 " CATEGORY="yes no up down left right on off stop go" ALPHA=10 LEAK_ENABLE=1 LEAK_TAU=20000e-6
+### Install python modules ###
+$ pip install -r requirements.txt
 ```
 
-## Building the Project
-
-1. Run `gen_config.py` to generate the configuration files in the Makefile directory.
-
-```
-pip install -r requirements.txt
-```
-```
-cd /speakmin
-```
-```
-python gen_config.py
-```
-
-2. Run SM simulation
-
-```
-cd /speakmin/src
-```
-```
-make run
-```
-you can install on the preferred path where you want. The default path is `/usr/local/bin`.
-```
-make install INSTALL_DIR=/desired/path/to/install
+## File trees
+```bash
+include              | Directory for header files
+speech2spikes        | Directory for speech-to-spike converstion utility
+python               | Directory for Python scripts
+src                  | Directory for source code
+├─ SMsim.cpp         | Main simulation file
+├─ Core.cpp          | Core functionalities of the simulator
+├─ Event_unit.cpp    | Event handling functionalities
+├─ Spike.cpp         | Spike handling functionalities
+└─ Makefile          | Makefile to build and manage the project
+run                  | Directory for running simulations
+├─ gen_config.py     | Script to generate sim configuration
+└─ Makefile          | Makefile for running simulations
 ```
 
-## Training Modes
-```
-make run TRAIN_MODE=NONE
-```
-- **DFA (Direct Feedback Alignment):** The 'default' training mode if no other mode is specified.
-```
-make run TRAIN_MODE=DFA
-```
-- **FA (Feedback Alignment):** Can be activated by setting the `TRAIN_MODE` variable to `FA`.
-```
-make run TRAIN_MODE=FA
+## How to run
+### 1. Generates spike dataset
+
+See details in `speech2spikes/gen_spike/readme.md`. Followings are examples.
+
+```bash
+### Training dataset ###
+$ cd speech2spikes/tools/gen_spike
+$ make OUTPUT_FILES="train0.bin train1.bin train2.bin train3.bin train4.bin train5.bin train6.bin train7.bin train8.bin train9.bin" WAV_FILE_SOURCE=not_testing SPLIT_NUM="300 300 300 300 300 300 300 300 300 300 " CATEGORY="yes no up down left right on off stop go" ALPHA=10 LEAK_ENABLE=1 LEAK_TAU=20000e-6
+
+### Test dataset ###
+$ cd speech2spikes/tools/gen_spike
+$ make OUTPUT_FILES="test.bin " WAV_FILE_SOURCE=testing SPLIT_NUM="300 " CATEGORY="yes no up down left right on off stop go" ALPHA=10 LEAK_ENABLE=1 LEAK_TAU=20000e-6
 ```
 
-### Optional Features
+### 2. Compiles codes
+```bash
+$ cd src
+$ make TRAIN_MODE={DFA|FA|NONE} TRAIN_PHASIC_ENABLED={0|1} TRAIN_ELIGIBLETRACE_ENABLED={0|1}
+```
+- Compile options
 
-- **TRAIN_PHASE:** This feature can be enabled by setting the `TRAIN_PHASIC_ENABLED` flag.
-```
-make run TRAIN_PHASIC_ENABLED=1
-```
-- **TRAIN_ELIGIBLETRACE:** This feature can be enabled by setting the `TRAIN_ELIGIBLETRACE_ENABLED` flag.
-```
-make run TRAIN_ELIGIBLETRACE_ENABLED=1
-```
+|Parameter |Default|Options |Description      |
+|:---------|:------|:-------|:----------------|
+|TRAIN_MODE|DFA    |DFA, FA, NONE|Training mode. DFA: Direct Feedback Alignment (`TRAIN_DFA`), FA: Feedback Alignment (`TRAIN_FA`) |
+|TRAIN_PHASIC_ENABLED|0     |0,1       |If `1`, phasic operations are enabled (`TRAIN_PHASE` will be defined)|
+|TRAIN_ELIGIBLETRACE_ENABLED|0 |0,1 |If `1`, eligibile trace function is enabled (`TRAIN_ELIGIBLETRACE`)|
 
-```
-make run TRAIN_MODE=NONE TRAIN_ELIGIBLETRACE_ENABLED=1 TRAIN_PHASIC_ENABLED=1
-```
+- Additional Makefile Targets 
 
-### Additional Makefile Targets 
-`make clean`, `make debug`, `make install`, `make uninstall`
+```bash
+### Removes the compiled object files and the executable.
+$ make clean
 
-Removes the compiled object files and the executable.
-```
-make clean
-```
+### Compiles the project with debugging symbols enabled.
+$ make debug   
 
-Compiles the project with debugging symbols enabled.
-```
-make debug
-```
+### Installs the executable to `INSTALL_DIR` (default:/usr/local/bin).
+$ make install {INSTALL_DIR=/desired/path/to/install}
 
-Installs the executable to /usr/local/bin.
-```
-make install
-```
-Removes the installed executable from /usr/local/bin.
-```
-make uninstall
+### Removes the installed executable from /usr/local/bin.
+$ make uninstall
 ```
 
+### 3. Runs simulations
+```bash
+$ cp -rp run run_1 (run_1 can be any your preferred name)
+$ cd run_1
+(modify gen_config.py if necessary)
+$ make
+```
 
 ## License
 This project is licensed under Apache License 2.0.
