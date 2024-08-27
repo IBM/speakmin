@@ -25,10 +25,10 @@ VCSV_FILE_SUFFIX ?= .vcsv
 VCSV_FILE_LIST ?= $(addsuffix ${VCSV_FILE_SUFFIX},$(addprefix ${VCSV_FILE_PREFIX},$(shell seq -w 16)))
 # c00.vcsv c01.vcsv ... c16.vcsv
 
-GIT_HOME ?= $(realpath ../..)
-DATASET_PATH ?= ${GIT_HOME}/dataset/speech_commands_v0.02
+S2S_HOME ?= $(realpath ..)
+DATASET_PATH ?= ${S2S_HOME}/dataset/speech_commands_v0.02
 
-PYTHONPATH := ${GIT_HOME}/python:${PYTHONPATH}
+PYTHONPATH := ${S2S_HOME}/python:${PYTHONPATH}
 export PYTHONPATH
 
 PY_SCRIPT_SPIKES = speech2spikes.py

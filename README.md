@@ -23,7 +23,6 @@ $ pip install -r requirements.txt
 ## File trees
 ```bash
 include              | Directory for header files
-speech2spikes        | Directory for speech-to-spike converstion utility
 python               | Directory for Python scripts
 src                  | Directory for source code
 ├─ SMsim.cpp         | Main simulation file
@@ -31,6 +30,8 @@ src                  | Directory for source code
 ├─ Event_unit.cpp    | Event handling functionalities
 ├─ Spike.cpp         | Spike handling functionalities
 └─ Makefile          | Makefile to build and manage the project
+tools                | Directory for tools
+└─ speech-to-spikes  | Directory for speech-to-spike converstion utility
 run                  | Directory for running simulations
 ├─ gen_config.py     | Script to generate sim configuration
 └─ Makefile          | Makefile for running simulations
@@ -39,15 +40,15 @@ run                  | Directory for running simulations
 ## How to run
 ### 1. Generates spike dataset
 
-See details in `speech2spikes/gen_spike/readme.md`. Followings are examples.
+See details in `tools/speech-to-spikes/gen_spike/readme.md`. Followings are examples.
 
 ```bash
 ### Training dataset ###
-$ cd speech2spikes/tools/gen_spike
+$ cd tools/speech-to-spikes/gen_spike
 $ make OUTPUT_FILES="train0.bin train1.bin train2.bin train3.bin train4.bin train5.bin train6.bin train7.bin train8.bin train9.bin" WAV_FILE_SOURCE=not_testing SPLIT_NUM="300 300 300 300 300 300 300 300 300 300 " CATEGORY="yes no up down left right on off stop go" ALPHA=10 LEAK_ENABLE=1 LEAK_TAU=20000e-6
 
 ### Test dataset ###
-$ cd speech2spikes/tools/gen_spike
+$ cd tools/speech-to-spikes/gen_spike
 $ make OUTPUT_FILES="test.bin " WAV_FILE_SOURCE=testing SPLIT_NUM="300 " CATEGORY="yes no up down left right on off stop go" ALPHA=10 LEAK_ENABLE=1 LEAK_TAU=20000e-6
 ```
 

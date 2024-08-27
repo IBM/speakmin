@@ -8,10 +8,10 @@ ECHO ?= 1
 ALIGN ?= 1
 TIME_UNIT ?= 1.0
 
-GIT_HOME ?= $(realpath ../..)
-DATASET_PATH ?= ${GIT_HOME}/dataset/speech_commands_v0.02
+S2S_HOME ?= $(realpath ..)
+DATASET_PATH ?= ${S2S_HOME}/dataset/speech_commands_v0.02
 
-PYTHONPATH := ${GIT_HOME}/python:${PYTHONPATH}
+PYTHONPATH := ${S2S_HOME}/python:${PYTHONPATH}
 export PYTHONPATH
 
 AUDIO_FILE = $(word ${FILE_INDEX},$(wildcard ${DATASET_PATH}/${CATEGORY}/*.wav))
