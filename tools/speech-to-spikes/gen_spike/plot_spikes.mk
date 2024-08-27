@@ -8,9 +8,9 @@ PLOT_INDEX_FROM ?= 0
 PLOT_INDEX_LIST ?= None
 PLOT_TITLE ?= 1
 
-GIT_HOME ?= $(realpath ../..)
+S2S_HOME ?= $(realpath ..)
 
-PYTHONPATH := ${GIT_HOME}/python:${PYTHONPATH}
+PYTHONPATH := ${S2S_HOME}/python:${PYTHONPATH}
 export PYTHONPATH
 
 PY_SCRIPT_SPIKES = plot_spikes.py

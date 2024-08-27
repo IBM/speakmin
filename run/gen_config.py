@@ -125,10 +125,8 @@ system_parameters = {
     "T_sim": 1000000000,
     "epoch": 100,                                               # Example epoch value
     "lr": 0.004,                                                # same as conductance steps. This is for 8bits ~ 1/250.
-    "test_file": "../speech2spikes/tools/gen_spike/test.bin",    # Replace with the actual test file path
-    "training_file": "../speech2spikes/tools/gen_spike/train",   # Replace with the actual training file path
-    # /home/sungminlee/Speakmin_draft/SpeakMin/speech2spikes/tools/gen_spike/train0.bin
-    # /home/sungminlee/Speakmin_draft/SpeakMin/speech2spikes/tools/gen_spike/final_new_num_dataset2
+    "test_file": "../tools/speech-to-spikes/gen_spike/test.bin",    # Replace with the actual test file path
+    "training_file": "../tools/speech-to-spikes/gen_spike/train",   # Replace with the actual training file path
     "N_chunks": 10,                             # you can devide training dataset as 'chunk'
 }
 

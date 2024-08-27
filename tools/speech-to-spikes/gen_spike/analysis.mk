@@ -7,9 +7,9 @@ PLOT_NUMBER ?= 16
 PLOT_INDEX_FROM ?= 0
 PLOT_INDEX_LIST ?= None
 
-GIT_HOME ?= $(realpath ../..)
+S2S_HOME ?= $(realpath ..)
 
-PYTHONPATH := ${GIT_HOME}/python:${PYTHONPATH}
+PYTHONPATH := ${S2S_HOME}/python:${PYTHONPATH}
 export PYTHONPATH
 
 PY_SCRIPT_SPIKES = analysis.py

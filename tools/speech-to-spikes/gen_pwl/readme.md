@@ -1,7 +1,7 @@
 ## How to run
 1. Download dataset (one time)
 ```
-$ cd ${GIT_HOME}/dataset
+$ cd ${S2S_HOME}/dataset
 $ make
 ```
 2. Generate PWL file
@@ -16,4 +16,4 @@ $ make {CATEGORY=} {FILE_INDEX=} {VSCALE=} {VSHIFT=} {ECHO=} {DATASET_PATH=}
 |VSCALE |Voltage scaling from original data |any|0.0894e-3|
 |VSHIFT |Voltage shift from original data |any|0.0|
 |ECHO   |Echo information |0,1|1|
-|DATASET_PATH|Dataset path |any |${GIT_HOME}/dataset/speech_commands_v0.02|
+|DATASET_PATH|Dataset path |any |${S2S_HOME}/dataset/speech_commands_v0.02|
