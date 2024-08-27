@@ -147,10 +147,10 @@ weights = {
     "W_fb": W_fb
 }
 
-# Paths to the JSON files in the src directory
-parameters_path = './src/init_parameters.json'
-weights_path = './src/init_weights.json'
-tau_path = './src/init_taus.json'
+# Paths to the JSON files
+parameters_path = './init_parameters.json'
+weights_path = './init_weights.json'
+tau_path = './init_taus.json'
 
 # Save the parameters to the init_parameters.json file
 with open(parameters_path, 'w') as f:
