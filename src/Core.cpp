@@ -1,3 +1,5 @@
+// Copyright contributors to the speakmin project
+// SPDX-License-Identifier: Apache-2.0
 #include "Core.h"
 #include "Config.h"
 #include <fstream>
@@ -13,10 +15,10 @@ using json = nlohmann::json;
 
 // Core constructor with distributed tau values
 Core::Core(const std::string& param_file, const std::string& weights_file, const std::vector<int>& tau_values) {
-    
+
     std::cout << "Parameter file path: " << param_file << std::endl;
     std::cout << "Weights file path: " << weights_file << std::endl;
-    
+
     Config config;
 
     // Read and parse parameter file
@@ -141,14 +143,14 @@ Core::Core(const Config& config, const std::vector<int>& tau_values)
         std::cout << "Neu_acc[" << i << "] = " << Neu_acc[i] << std::endl;
     }
     */
-   
+
     /**/
     std::cout << "N_out_times: " << N_out_times << std::endl;
     std::cout << "PTE_slide: " << PTE_slide << std::endl;
     std::cout << "PTE_times: " << PTE_times<< std::endl;
     std::cout << "PTE_range: " << PTE_range << std::endl;
     std::cout << "ET_N: " << ET_N<< std::endl;
-    
+
 }
 
 // Copy constructor
@@ -191,7 +193,7 @@ void Core::reset() {
         neuron = Neuron(neuron.get_V_mem(), neuron.get_tau(), neuron.get_V_th(), neuron.get_V_bot(), neuron.get_V_reset(), neuron.get_SG_window());
 #endif
         }
-    
+
     for (auto& neuron : Neu_out) {
 #if defined(REFRACTORY)
         neuron = Neuron(neuron.get_V_mem(), neuron.get_tau(), neuron.get_V_th(), neuron.get_V_bot(), neuron.get_V_reset(), neuron.get_t_ref(), neuron.get_SG_window());
@@ -210,7 +212,7 @@ void Core::reset() {
         Neu_out[i].reset();
         Neu_out[i].reset_ref();
     }
-    
+
 
     while (!external_S_queue.empty()) {
         external_S_queue.pop();
@@ -276,7 +278,7 @@ bool Core::run_loop() {
         T_now = std::min(T_external, T_internal);
 
         // std::cout << T_now << std::endl;
-        
+
         if (T_now > T_sim) break;
 
         while (!external_S_queue.empty() && external_S_queue.top().time <= T_now) {
@@ -307,10 +309,10 @@ bool Core::run_loop() {
         // std::cout << "PTE_slide: " << PTE_slide << ", PTE_times: " << PTE_times << ", PTE_range: " << PTE_range << std::endl;
         train_signal = static_cast<size_t>(((static_cast<size_t>(T_now) + PTE_range * PTE_slide) / PTE_range) % PTE_times);
 #endif
-        
+
         // Parallelize the leak method for Neu_res and Neu_out
         #pragma omp parallel
-        { 
+        {
             #pragma omp for schedule(static)
             for (size_t i = 0; i < Neu_res.size(); ++i) {
                 Neu_res[i].leak(T_now);
@@ -344,7 +346,7 @@ bool Core::run_loop() {
                 }
             }
         }
-#if defined(TRAIN_FA) || defined(TRAIN_DFA)   
+#if defined(TRAIN_FA) || defined(TRAIN_DFA)
         while (!Event_queue_delay.empty() && Event_queue_delay.top().time <= T_now) {
             #pragma omp critical
             {
@@ -364,7 +366,7 @@ bool Core::run_loop() {
 #endif
         // std::cout << "after spike sampling " << std::endl;
 
-        // checking firing 
+        // checking firing
         #pragma omp parallel sections
         {
             #pragma omp section
@@ -405,7 +407,7 @@ bool Core::run_loop() {
 #if defined(TRAIN_ELIGIBLETRACE)
                             #pragma omp critical
                             {
-                                
+
                                 for (int n = 0; n < ET_N; ++n) {
                                     S_vec_trace.push(Spike(T_now + t_delay + n + 1, {i, 'r'}));
                                 }
@@ -427,13 +429,13 @@ bool Core::run_loop() {
                 for (size_t i = 0; i < Neu_out.size(); ++i) {
                     if (Neu_out[i].is_firing()) {
                         bool SG_now = Neu_out[i].get_SG();
-#if defined(TRAIN_PHASE)            
+#if defined(TRAIN_PHASE)
                         if (enabling_train && !train_signal)
 #else
                         if (enabling_train)
 #endif
                         {
-                            if ( (static_cast<size_t>(i / N_out_times) != class_now) && (static_cast<size_t>(i % N_out_times) == train_index) ) {                     
+                            if ( (static_cast<size_t>(i / N_out_times) != class_now) && (static_cast<size_t>(i % N_out_times) == train_index) ) {
                                 if (SG_now) {
                                     for (const auto& S_now : S_vec_now) {
                                         int id_now = S_now.id.first;
@@ -477,7 +479,7 @@ bool Core::run_loop() {
                                 }
     #endif
                                 }
-    #if defined(TRAIN_DFA)                            
+    #if defined(TRAIN_DFA)
                                 for (const auto& E_now : Event_vec_now) {
                                     int spk_id_now = E_now.spk_id.first;
                                     int neu_id_now = E_now.neu_id.first;
@@ -494,7 +496,7 @@ bool Core::run_loop() {
                         #pragma omp atomic
                         Neu_acc[static_cast<size_t>(i / N_out_times)] += 1;
                     }
-#if defined(TRAIN_PHASE)        
+#if defined(TRAIN_PHASE)
                 // not firing but give the chance to negative update
                 // there is missing case on on-train-phase
                 // if SG is on, then the SG_ref would be flagged
@@ -520,7 +522,7 @@ bool Core::run_loop() {
             }
 
             #pragma omp section
-#if defined(TRAIN_PHASE)            
+#if defined(TRAIN_PHASE)
             if (enabling_train && !train_signal) {
 #else
             if (enabling_train) {
@@ -594,7 +596,7 @@ bool Core::run_loop() {
 
         if (enabling_train && !train_signal) {
 
-            // std::cout << "Here is training part"<< std::endl; 
+            // std::cout << "Here is training part"<< std::endl;
             std::vector<Event_unit> events;
             #pragma omp critical
             {
@@ -604,7 +606,7 @@ bool Core::run_loop() {
                 }
             }
 
-            // std::cout << "events.size(): "<< events.size() << std::endl; 
+            // std::cout << "events.size(): "<< events.size() << std::endl;
 
             #pragma omp parallel for
             for (std::size_t i = 0; i < events.size(); ++i) {
@@ -615,7 +617,7 @@ bool Core::run_loop() {
                 char neu_l_now = E_now.neu_id.second;
                 bool sign = E_now.sign;
                 // std::cout << "Before update: W_out[" << spk_id_now << "][" << neu_id_now << "] = " << W_out[spk_id_now][neu_id_now] << std::endl;
-                if (spk_l_now == 'r' && neu_l_now == 'o') { 
+                if (spk_l_now == 'r' && neu_l_now == 'o') {
                     if (sign) {
                         #pragma omp atomic
                         W_out[spk_id_now][neu_id_now] += lr*0.1;
@@ -628,10 +630,10 @@ bool Core::run_loop() {
                 }
                 // std::cout << "After update: W_out[" << spk_id_now << "][" << neu_id_now << "] = " << W_out[spk_id_now][neu_id_now] << std::endl;
 #if defined(TRAIN_FA) || defined(TRAIN_DFA)
-                       
+
                 else if (spk_l_now == 'r' && neu_l_now == 'r'){
                     if (sign) {
-                        #pragma omp atomic 
+                        #pragma omp atomic
                         W_res[spk_id_now][neu_id_now] += lr*0.1;
                         if (W_res[spk_id_now][neu_id_now] > 0.10) W_res[spk_id_now][neu_id_now] = 0.1;
                     } else {
@@ -640,10 +642,10 @@ bool Core::run_loop() {
                         if (W_res[spk_id_now][neu_id_now] < -0.10) W_res[spk_id_now][neu_id_now] = -0.1;
                     }
                 }
-                /* 
+                /*
                 else if (spk_l_now == 'i' && neu_l_now == 'r'){
                     if (sign) {
-                        #pragma omp atomic 
+                        #pragma omp atomic
                         W_in[spk_id_now][neu_id_now] += lr*0.1;
                         if (W_in[spk_id_now][neu_id_now] > 0.1) W_in[spk_id_now][neu_id_now] = 0.1;
                     } else {
@@ -652,7 +654,7 @@ bool Core::run_loop() {
                         if (W_in[spk_id_now][neu_id_now] < -0.1) W_in[spk_id_now][neu_id_now] = -0.1;
                     }
                 }
-                
+
                 else if (spk_l_now == 'r' && neu_l_now == 'r'){
                     if (sign) {
                         #pragma omp atomic
@@ -663,7 +665,7 @@ bool Core::run_loop() {
                         W_res[spk_id_now][neu_id_now] -= lr*0.1;
                         if (W_res[spk_id_now][neu_id_now] < -1.0*0.1) W_res[spk_id_now][neu_id_now] = -1.0*0.1;
                     }
-                }*/  
+                }*/
 #endif
             }
             events.clear();
@@ -677,7 +679,7 @@ bool Core::run_loop() {
                 for (size_t i = 0; i < Neu_out.size(); ++i) {
                     #pragma omp atomic
                     W_out[i][j] -= lr * 0.1 * W_out[i][j];
-                    
+
                     //if (W_out[i][j] > 0) W_out[i][j] -= lr
                     //else W_out[i][j] += lr
 

@@ -1,3 +1,5 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
 import numpy as np
 import json
 import os
@@ -9,7 +11,7 @@ np.random.seed(0)
 num_neu_in = 16
 num_neu_res = 496
 num_class = 10
-num_out_times = 1 
+num_out_times = 1
 # 2, 4, 10
 num_neu_out = num_class * num_out_times # 10
 # 20, 40, 100

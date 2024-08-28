@@ -1,3 +1,6 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
+
 OUTPUT_FILES ?= train.bin test.bin
 CATEGORY ?= zero one two
 SPLIT_NUM ?= 16 16

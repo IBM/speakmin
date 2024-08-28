@@ -1,9 +1,11 @@
+// Copyright contributors to the speakmin project
+// SPDX-License-Identifier: Apache-2.0
 #include "Spike.h"
 
 // Constructor
-// example of Neu_id: # of neuron, site (0, 'i') or (0, 'r'). 
+// example of Neu_id: # of neuron, site (0, 'i') or (0, 'r').
 // 'i' is 'input' and 'r' is 'reservoir'
-// or 'f' is 'forward' (A side of CBA) and 'b' is 'hidden' (b side of CBA) 
+// or 'f' is 'forward' (A side of CBA) and 'b' is 'hidden' (b side of CBA)
 Spike::Spike(uint32_t time, std::pair<size_t, char> id) : time(time), id(id) {}
 
 // Comparison operator for priority queue

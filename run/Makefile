@@ -1,3 +1,6 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
+
 SMSIM ?= ../src/SMsim
 
 # fixed params

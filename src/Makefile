@@ -1,3 +1,6 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
+
 # Compiler and flags
 CXX := g++
 CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2 -g -DREFRACTORY -fopenmp

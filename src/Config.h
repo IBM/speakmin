@@ -1,3 +1,5 @@
+// Copyright contributors to the speakmin project
+// SPDX-License-Identifier: Apache-2.0
 #ifndef CONFIG_H
 #define CONFIG_H
 
@@ -20,7 +22,7 @@ struct Config {
     double t_ref;
 #endif
     double SG_window;
-    
+
     int N_in;
     int N_res;
     int N_out;

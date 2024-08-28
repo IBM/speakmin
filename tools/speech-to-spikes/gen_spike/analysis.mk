@@ -1,3 +1,6 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
+
 OUTPUT_FILES ?= train.bin test.bin
 PICKLE_FILE ?= $(addsuffix .pickle,$(basename $(word 1,$(OUTPUT_FILES))))
 
