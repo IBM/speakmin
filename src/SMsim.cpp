@@ -1,3 +1,5 @@
+// Copyright contributors to the speakmin project
+// SPDX-License-Identifier: Apache-2.0
 #include <iomanip>
 #include <getopt.h>
 #include <sys/time.h>
@@ -125,7 +127,7 @@ void load_spike_trains_parallel(const std::string& file_path, std::vector<std::v
 
         all_spike_times[i] = std::move(spike_times);
         all_neuron_indices[i] = std::move(neuron_indices);
-        
+
         // you could change this part for another classes
         all_labels[i] = label;
         // all_labels[i] = label-10;
@@ -317,7 +319,7 @@ int main(int argc, char *argv[]) {
     }
     json param_json;
     param_ifs >> param_json;
-    
+
     int num_epochs = param_json["system_parameter"]["epoch"].get<int>();
     std::string base_train_file_path = param_json["system_parameter"]["training_file"].get<std::string>();
     std::string test_file_path = param_json["system_parameter"]["test_file"].get<std::string>();

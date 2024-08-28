@@ -1,3 +1,5 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
 import numpy as np
 import torch
 from torchvision import datasets, transforms
@@ -92,7 +94,7 @@ for i, (images, labels) in enumerate(tqdm(train_loader)):
         train_spikes.append(spikes)
         train_labels.append(label.item())
         data_point_count += 1
-        
+
         if data_point_count == chunk_size:
             # train_path = f'./data/{size}x{size}/{batch_size}/train_spikes_chunk_{chunk_index}.bin'
             # train_path = f'./data/{size}x{size}_bias/{batch_size}/train_spikes_chunk_{chunk_index}.bin'

@@ -1,3 +1,5 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
 #
 # Test, all from "testing" source pool, categories are core 20 words.
 #------------------------------------------------------------------------------

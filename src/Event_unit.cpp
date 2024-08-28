@@ -1,3 +1,5 @@
+// Copyright contributors to the speakmin project
+// SPDX-License-Identifier: Apache-2.0
 #include "Event_unit.h"
 
 // Constructor for Event_unit

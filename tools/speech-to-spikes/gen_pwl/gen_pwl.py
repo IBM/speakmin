@@ -1,3 +1,5 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
 
 if __name__ == '__main__':
     import argparse
@@ -9,7 +11,7 @@ if __name__ == '__main__':
     parser.add_argument('--vscale', help='voltage scale factor', type=float, default=0.0894e-3)
     parser.add_argument('--vshift', help='voltage shift factor', type=float, default=1.0)
     parser.add_argument('--echo', help='echo information', action='store_true', default=False)
-    args = parser.parse_args()    
+    args = parser.parse_args()
 
     sound = AudioCore(args.audio_file)
     if args.echo:

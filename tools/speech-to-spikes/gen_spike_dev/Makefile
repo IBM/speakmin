@@ -1,3 +1,6 @@
+# Copyright contributors to the speakmin project
+# SPDX-License-Identifier: Apache-2.0
+
 CATEGORY ?= up
 FILE_INDEX ?= 1
 # FILE_INDEX must starts from 1 (not 0)

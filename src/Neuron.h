@@ -1,3 +1,5 @@
+// Copyright contributors to the speakmin project
+// SPDX-License-Identifier: Apache-2.0
 #ifndef NEURON_H
 #define NEURON_H
 
@@ -95,8 +97,8 @@ public:
     }
 
     // Function to check if surrogate gradient reference time is active
-    inline bool is_SG_ref(uint32_t T_now) const { 
-        
+    inline bool is_SG_ref(uint32_t T_now) const {
+
         return T_now < T_SG; }
 
 #if defined(REFRACTORY)

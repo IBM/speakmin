@@ -1,4 +1,5 @@
-// (C) Copyright IBM Corp. 2017
+// Copyright contributors to the speakmin project
+// SPDX-License-Identifier: Apache-2.0
 #include <iostream>
 #include <algorithm>
 
