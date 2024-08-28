@@ -18,6 +18,10 @@ $ curl -L -o include/nlohmann/json.hpp https://github.com/nlohmann/json/releases
 
 ### Install python modules ###
 $ pip install -r requirements.txt
+
+### Optional python modules for MNIST-to-spikes (use +cpu version to avoid installing large CUDA related files)
+$ pip install torch==2.3.1+cpu        -f https://download.pytorch.org/whl/torch_stable.html
+$ pip install torchvision==0.18.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 ```
 
 ## File trees
