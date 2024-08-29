@@ -1,9 +1,12 @@
 # Copyright contributors to the speakmin project
 # SPDX-License-Identifier: Apache-2.0
 
+# Get short git revision
+GIT_REV := $(shell git rev-parse --short HEAD)
+
 # Compiler and flags
 CXX := g++
-CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2 -g -DREFRACTORY -fopenmp
+CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2 -g -DREFRACTORY -fopenmp -D__GIT_REV__=\"$(GIT_REV)\"
 LDFLAGS := -fopenmp -lstdc++fs
 
 # Default to TRAIN_FA if TRAIN_MODE is not specified
@@ -29,9 +32,6 @@ endif
 # Include directories
 INCLUDES := -I../include
 
-# Get short git revision
-GIT_REV := $(shell git rev-parse --short HEAD)
-
 # Source, object, and dependency files
 SRCS := SMsim.cpp Core.cpp Event_unit.cpp Spike.cpp
 OBJS := $(SRCS:.cpp=.o)
@@ -50,7 +50,7 @@ INSTALL_DIR ?= /usr/local/bin
 all: check_includes $(TARGET)
 
 # Debug target
-debug: CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O0 -g -DDEBUG -DREFRACTORY -fopenmp
+debug: CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O0 -g -DDEBUG -DREFRACTORY -fopenmp -D__GIT_REV__=\"$(GIT_REV)\"
 debug: clean check_includes $(TARGET)
 
 # Check includes directory
@@ -60,7 +60,7 @@ check_includes:
 
 # Link target
 $(TARGET): $(OBJS)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET) $(LDFLAGS) -D__GIT_REV__=\"$(GIT_REV)\"
+	$(CXX) $(CXXFLAGS) $(INCLUDES) $(OBJS) -o $(TARGET) $(LDFLAGS)
 
 # Include dependency files
 -include $(DEPS)
