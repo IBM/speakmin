@@ -9,11 +9,11 @@ $ make
 $ make {CATEGORY=} {FILE_INDEX=} {VSCALE=} {VSHIFT=} {ECHO=} {DATASET_PATH=}
 ```
 
-|PARAM   | DESCRIPTION     | OPTIONS | DEFAULT |
+|PARAM   |DEFAULT|OPTIONS| DESCRIPTION     |
 |:-------|:----------------|:--------|:--------|
-|CATEGORY|Dataset category |backwawrd,bed,bird,cat,dog,down,eight,five,follow,forward,four,go,happy,house,learn,left,marvin,nine,no,off,on,one,right,seven,sheila,six,stop,three,tree,two,up,visual,wow,yes,zero|up|
-|FILE_INDEX|File index number in each category. Must start from `1` not `0`|any |1|
-|VSCALE |Voltage scaling from original data |any|0.0894e-3|
-|VSHIFT |Voltage shift from original data |any|0.0|
-|ECHO   |Echo information |0,1|1|
-|DATASET_PATH|Dataset path |any |${S2S_HOME}/dataset/speech_commands_v0.02|
+|CATEGORY|up|backwawrd,<br>bed,<br>bird,<br>cat,<br>dog,<br>down,<br>eight,<br>five,<br>follow,<br>forward,<br>four,<br>go,<br>happy,<br>house,<br>learn,<br>left,<br>marvin,<br>nine,<br>no,<br>off,<br>on,<br>one,<br>right,<br>seven,<br>sheila,<br>six,<br>stop,<br>three,<br>tree,<br>two,<br>up,<br>visual,<br>wow,<br>yes,<br>zero|Dataset category |
+|FILE_INDEX|1|any |File index number in each category. Must start from `1` not `0`|
+|VSCALE |0.0894e-3|any|Voltage scaling from original data |
+|VSHIFT |0.0|any|Voltage shift from original data |
+|ECHO   |1|0,1|Echo information |
+|DATASET_PATH|${S2S_HOME}/dataset/speech_commands_v0.02|any |Dataset path |
