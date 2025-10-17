@@ -149,7 +149,7 @@ system_parameters = {
     "lr": 0.004,                                                # same as conductance steps. This is for 8bits ~ 1/250.
     "test_file": "../tools/speech-to-spikes/gen_spike/test.bin",    # Replace with the actual test file path
     "training_file": "../tools/speech-to-spikes/gen_spike/train",   # Replace with the actual training file path
-    "label_to_class_map": label_to_class_map    # Mapping between labels in spike files and calsses in speakmin simulator
+    "label_to_class_map": label_to_class_map,   # Mapping between labels in spike files and calsses in speakmin simulator
     "N_chunks": 10,                             # you can devide training dataset as 'chunk'
 }
 

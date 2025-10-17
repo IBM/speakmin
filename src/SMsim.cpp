@@ -335,7 +335,7 @@ int main(int argc, char *argv[]) {
     int N_chunks = param_json["system_parameter"]["N_chunks"].get<int>();
     std::unordered_map<uint8_t, uint8_t> label_to_class_map;
     if (param_json["system_parameter"].contains("label_to_class_map")) {
-        for (const auto& pair : param_json["system_parameter"]["label_mapping"]) {
+        for (const auto& pair : param_json["system_parameter"]["label_to_class_map"]) {
             if (pair.size() == 2) {
                 int key = pair[0];
                 int value = pair[1];
@@ -343,8 +343,9 @@ int main(int argc, char *argv[]) {
             }
         }
     } else {
-        // if "system_parameter/label_mapping" does not exist in JSON, use the label as class index
-        for (int i = 0; i < param_json["core_parameters"]["N_class"].get<int>(); ++i) {
+        // Even if "system_parameter/label_to_class_map" does not exist in JSON,
+        // label index within the range of number of classes can be used.
+        for (int i = 0; i < param_json["core_parameter"]["N_class"].get<int>(); ++i) {
             label_to_class_map[i] = i;
         }
     }
@@ -354,6 +355,13 @@ int main(int argc, char *argv[]) {
     std::cout << "Training file path: " << base_train_file_path << std::endl;
     std::cout << "Test file path: " << test_file_path << std::endl;
     std::cout << "Simulation time (T_sim): " << T_sim << std::endl;
+    std::cout << "Learing rate (lr): " << lr << std::endl;
+    std::cout << "N_chunks: " << N_chunks << std::endl;
+    std::cout << "Label to class map: ";
+    for (const auto& [key, value] : label_to_class_map) {
+        std::cout << "[" << static_cast<int>(key) << " to " << static_cast<int>(value) << "] ";
+    }
+    std::cout << std::endl;
 
     std::cout << "version: " <<  __GIT_REV__ << std::endl;
     std::cout << "CXX: " <<  __VERSION__ << std::endl;
