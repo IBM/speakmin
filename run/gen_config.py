@@ -124,7 +124,7 @@ core_parameters = {
 
 # Define the system parameters dictionary
 system_parameters = {
-    "T_sim": 1000000000,
+    "T_sim": 1000000,
     "epoch": 100,                                               # Example epoch value
     "lr": 0.004,                                                # same as conductance steps. This is for 8bits ~ 1/250.
     "test_file": "../tools/speech-to-spikes/gen_spike/test.bin",    # Replace with the actual test file path
