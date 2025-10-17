@@ -19,8 +19,8 @@ public:
     Core(const std::string& param_file, const std::string& weights_file, const std::vector<int>& tau_values);
     Core(const Config& config);
     Core(const Config& config, const std::vector<int>& tau_values);
-    Core(const Core& other); // 복사 생성자
-    Core& operator=(const Core& other); // 복사 대입 연산자
+    Core(const Core& other); // copy constructor
+    Core& operator=(const Core& other); // copy assignment operator
 
     bool run();
     void load_spike_train(const std::vector<uint32_t>& spike_times, const std::vector<uint16_t>& neuron_indices);
@@ -28,7 +28,7 @@ public:
     void save_weights(const std::string& filename) const;
     void load_weights(const std::string& filename);
 
-    void reset(); // 초기화 함수 추가
+    void reset(); // add initialization function
 
     bool enabling_train;
     uint32_t T_sim;

@@ -13,6 +13,7 @@
 #include <nlohmann/json.hpp>
 #include <omp.h>
 #include <bitset>
+#include <unordered_map>
 
 #include "Core.h"
 
@@ -225,7 +226,8 @@ void print_progress_bar(int current, int total, const std::chrono::time_point<st
 }
 
 // Run the simulation and return the accuracy
-double run_simulation(Core& core_template, const std::string& file_path, int epoch, const std::string& type, int& data_count) {
+double run_simulation(Core& core_template, const std::string& file_path, int epoch, const std::string& type, int& data_count,
+                      std::unordered_map<uint8_t, uint8_t>& label_to_class_map) {
     int correct_count = 0;
     bool enabling_train = (type == "train");
 
@@ -250,7 +252,12 @@ double run_simulation(Core& core_template, const std::string& file_path, int epo
         core_template.reset(); // Reset neurons and spike queues
         core_template.enabling_train = enabling_train;
         core_template.load_spike_train(all_spike_times[i], all_neuron_indices[i]);
-        core_template.class_label = all_labels[i];
+        if (label_to_class_map.find(all_labels[i]) != label_to_class_map.end()) {
+            core_template.class_label = label_to_class_map[all_labels[i]];
+        } else {
+            std::cout << "all_labels[i]=" << static_cast<int>(all_labels[i]) << std::endl;
+            throw std::runtime_error("label_to_class_map is not properly set. Please check system_parameter/label_to_class_map in JSON file.");
+        }
 
         bool is_correct = core_template.run();
 
@@ -326,12 +333,35 @@ int main(int argc, char *argv[]) {
     int T_sim = param_json["system_parameter"]["T_sim"].get<int>();
     double lr = param_json["system_parameter"]["lr"].get<double>();
     int N_chunks = param_json["system_parameter"]["N_chunks"].get<int>();
+    std::unordered_map<uint8_t, uint8_t> label_to_class_map;
+    if (param_json["system_parameter"].contains("label_to_class_map")) {
+        for (const auto& pair : param_json["system_parameter"]["label_to_class_map"]) {
+            if (pair.size() == 2) {
+                int key = pair[0];
+                int value = pair[1];
+                label_to_class_map[key] = value;
+            }
+        }
+    } else {
+        // Even if "system_parameter/label_to_class_map" does not exist in JSON,
+        // label index within the range of number of classes can be used.
+        for (int i = 0; i < param_json["core_parameter"]["N_class"].get<int>(); ++i) {
+            label_to_class_map[i] = i;
+        }
+    }
 
     std::cout << "Loaded system parameters:" << std::endl;
     std::cout << "Epochs: " << num_epochs << std::endl;
     std::cout << "Training file path: " << base_train_file_path << std::endl;
     std::cout << "Test file path: " << test_file_path << std::endl;
     std::cout << "Simulation time (T_sim): " << T_sim << std::endl;
+    std::cout << "Learing rate (lr): " << lr << std::endl;
+    std::cout << "N_chunks: " << N_chunks << std::endl;
+    std::cout << "Label to class map: ";
+    for (const auto& [key, value] : label_to_class_map) {
+        std::cout << "[" << static_cast<int>(key) << " to " << static_cast<int>(value) << "] ";
+    }
+    std::cout << std::endl;
 
     std::cout << "version: " <<  __GIT_REV__ << std::endl;
     std::cout << "CXX: " <<  __VERSION__ << std::endl;
@@ -384,13 +414,13 @@ int main(int argc, char *argv[]) {
         int train_data_count;
         int test_data_count;
 
-        double train_result = run_simulation(core_template, train_file_path, epoch, "train", train_data_count);
+        double train_result = run_simulation(core_template, train_file_path, epoch, "train", train_data_count, label_to_class_map);
         std::cout << "Epoch " << epoch << " training accuracy: " << train_result * 100 << "%" << " with " << train_data_count << " data points." << std::endl;
 
         if (epoch % 5 == 0) {
             std::cout << "Starting testing epoch " << epoch << "...\n";
 
-            double test_result = run_simulation(core_template, test_file_path, epoch, "test", test_data_count);
+            double test_result = run_simulation(core_template, test_file_path, epoch, "test", test_data_count, label_to_class_map);
             std::cout << "Epoch " << epoch << " test accuracy: " << test_result * 100 << "%" << " with " << test_data_count << " data points." << std::endl;
             auto epoch_end = std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> epoch_duration = epoch_end - epoch_start;

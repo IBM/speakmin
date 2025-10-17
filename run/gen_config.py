@@ -18,6 +18,26 @@ num_neu_out = num_class * num_out_times # 10
 
 num_neu_bias = 10
 
+# Label to class mapping
+#  - Must be a list of ["label index in spike file", "class index in speakmin"]
+#  - Label indexs for the categories can be found in the table of
+#    tools/speech-to-spikes/gen_spike/readme.md in github IBM/speakmin
+#  - For instance, label indexs for "yes no up down left right on off stop go" is "10 11 12 13 14 15 16 17 18 19"
+#  - Following 2D list is a map for the categories of "yes no up down left right on off stop go"
+#    to the classes of "0 1 2 3 4 5 6 7 8 9".
+label_to_class_map = [
+    [10, 0],
+    [11, 1],
+    [12, 2],
+    [13, 3],
+    [14, 4],
+    [15, 5],
+    [16, 6],
+    [17, 7],
+    [18, 8],
+    [19, 9]
+]
+
 # Function to quantize weights to 8-bit based on custom range
 def quantize_weights(weights, min_val, max_val):
     quantized = np.round((weights - min_val) / (max_val - min_val) * 255).astype(np.uint8)
@@ -129,6 +149,7 @@ system_parameters = {
     "lr": 0.004,                                                # same as conductance steps. This is for 8bits ~ 1/250.
     "test_file": "../tools/speech-to-spikes/gen_spike/test.bin",    # Replace with the actual test file path
     "training_file": "../tools/speech-to-spikes/gen_spike/train",   # Replace with the actual training file path
+    "label_to_class_map": label_to_class_map,   # Mapping between labels in spike files and calsses in speakmin simulator
     "N_chunks": 10,                             # you can devide training dataset as 'chunk'
 }
 
