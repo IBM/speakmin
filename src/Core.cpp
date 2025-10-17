@@ -702,7 +702,7 @@ bool Core::run_loop() {
 #endif
     // train_index = (train_index + 1) % N_out_times;
 
-    uint8_t max_index = std::distance(Neu_acc.begin(), std::max_element(Neu_acc.begin(), Neu_acc.end()));
+    size_t max_index = std::distance(Neu_acc.begin(), std::max_element(Neu_acc.begin(), Neu_acc.end()));
     bool is_correct = (max_index == class_now);
     return is_correct;
 }

@@ -6,6 +6,7 @@
 #include <cmath>
 #include <ostream>
 #include <iostream>
+#include <cstdint>
 
 class Neuron {
 private:

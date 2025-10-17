@@ -5,7 +5,25 @@
 GIT_REV := $(shell git rev-parse --short HEAD)
 
 # Compiler and flags
-CXX := g++
+UNAME_S := $(shell uname -s)
+ifeq ($(UNAME_S),Darwin)
+    # Check if Homebrew is installed
+    HOMEBREW := $(shell command -v brew 2>/dev/null)
+    ifeq ($(HOMEBREW),)
+        $(error Homebrew not found! Please install Homebrew from https://brew.sh/)
+    endif
+
+    # Find latest g++ version installed via Homebrew
+    GPP_BIN := $(shell ls $(shell brew --prefix)/bin | grep -E '^g\+\+\-[0-9]+$$' | sort -V | tail -n 1)
+    GPP_PATH := $(shell brew --prefix)/bin/$(GPP_BIN)
+    ifeq ("$(wildcard $(GPP_PATH))","")
+        $(error No Homebrew-installed g++ found! Please install it using: brew install gcc)
+    endif
+
+    CXX := $(GPP_PATH)
+else
+    CXX := g++
+endif
 CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2 -g -DREFRACTORY -fopenmp -D__GIT_REV__=\"$(GIT_REV)\"
 LDFLAGS := -fopenmp -lstdc++fs
 
