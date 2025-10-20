@@ -266,7 +266,7 @@ double run_simulation(Core& core_template, const std::string& file_path, int epo
         }
         ++data_count;
 
-        print_progress_bar(data_count, (type == "train") ? 10000 : 1000, start_time);
+        print_progress_bar(data_count, all_spike_times.size(), start_time);
 
         if (data_count % 1000 == 0) {
             double current_accuracy = static_cast<double>(correct_count) / data_count;
